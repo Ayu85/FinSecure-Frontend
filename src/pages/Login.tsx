@@ -4,10 +4,12 @@ import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
 import { axiosInstance } from '@/lib/axiosInstance'
 import { useToast } from '@/hooks/use-toast'
+import useAuth from '@/store/useAuth'
 const Login = () => {
   const emailRef = useRef()
   const passwordRef = useRef()
   const { toast } = useToast()
+  const { login } = useAuth()
   const handleLogin = async () => {
     try {
       const response = await axiosInstance.post('/auth/login-user', {
@@ -19,12 +21,13 @@ const Login = () => {
           title: response.data.message,
           variant: 'success'
         })
+        login(response.data.user)
       }
     } catch (error) {
-      console.log(error);
-      
+      console.log(error)
+
       toast({
-        title: error.response.data.message || "Login failed",
+        title: error.response.data.message || 'Login failed',
         variant: 'destructive'
       })
     }
