@@ -46,7 +46,7 @@ const Sidebar = () => {
             )
           })}
         </div>
-        <div className='flex items-center gap-2 cursor-pointer'>
+        <div className='flex items-center gap-2 cursor-pointer pl-2'>
           <Settings size={18} />
           <h1>Settings</h1>
         </div>

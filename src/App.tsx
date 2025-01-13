@@ -7,6 +7,7 @@ import { Toaster } from './components/ui/toaster'
 import useAuth from './store/useAuth'
 import Dashboard from './pages/Dashboard'
 import Loader from './components/Loader'
+import Wallet from './pages/Wallet'
 
 const App = () => {
   const { isAuth, checkAuth, isCheckingAuth } = useAuth()
@@ -31,6 +32,10 @@ const App = () => {
             <Route
               path='/dashboard'
               element={isAuth ? <Dashboard /> : <Navigate to={'/'} />}
+            />
+            <Route
+              path='/wallets'
+              element={isAuth ? <Wallet /> : <Navigate to={'/'} />}
             />
           </Routes>
         </>

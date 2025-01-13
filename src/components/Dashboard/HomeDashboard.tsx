@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { ArrowDown, ArrowUp, IndianRupee, EllipsisVertical } from 'lucide-react';
+import { ArrowDown, ArrowUp, IndianRupee, EllipsisVertical, CreditCard, HandCoins } from 'lucide-react';
 import useAccount from '@/store/useAccount';
 
 const HomeDashboard = () => {
@@ -16,7 +16,7 @@ const HomeDashboard = () => {
       if (popoverRef.current && !popoverRef.current.contains(event.target)) {
         setCurrentCard(-1);
       }
-    };
+    };  
 
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
@@ -76,6 +76,7 @@ const HomeDashboard = () => {
                   }}
                   className="absolute right-1 cursor-pointer top-3 size-5"
                 />
+                <HandCoins className='absolute -bottom-2 opacity-10 right-2 size-44'/>
                 <div
                   ref={popoverRef}
                   className={`absolute right-1 transition-all scale-0 ${
@@ -93,7 +94,7 @@ const HomeDashboard = () => {
                   {item.icon}
                 </h1>
                 <h1>{item.name}</h1>
-                <h1>{totalBalance}</h1>
+                <h1 className='flex items-center '> <IndianRupee size={15}/>{totalBalance}</h1>
               </div>
             );
           })}

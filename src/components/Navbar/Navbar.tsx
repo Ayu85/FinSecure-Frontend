@@ -26,7 +26,7 @@ const Navbar = () => {
         {authUser && (
           <Button
             onClick={logout}
-            className='flex items-center gap-1 '
+            className='flex  items-center gap-1 '
             variant={'destructive'}
           >
             Logout <LogOut />
