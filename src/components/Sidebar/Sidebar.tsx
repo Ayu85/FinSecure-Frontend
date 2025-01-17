@@ -1,4 +1,4 @@
-import { Coins, Home, Settings, User, Wallet } from 'lucide-react'
+import { Coins, Home, IdCardIcon, Settings, User, Wallet } from 'lucide-react'
 import React from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 
@@ -18,6 +18,11 @@ const Sidebar = () => {
       name: 'Investments',
       path: '/investments',
       icon: <Coins size={18} />
+    },
+    {
+      name: 'Loans',
+      path: '/loans',
+      icon: <IdCardIcon size={18} />
     },
     {
       name: 'Profile',
