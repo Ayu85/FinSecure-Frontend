@@ -8,6 +8,7 @@ interface account {
   fetchAccounts: () => Promise<void>
   fetchTransactions: () => void
   fetchMoneyOut: () => void
+  fetchMoneyIn: () => void
 }
 const useAccount = create<account>((set, get) => ({
   userAccounts: [],
@@ -44,6 +45,22 @@ const useAccount = create<account>((set, get) => ({
       })
       
       set({ moneyOut: bal })
+    } catch (error) {
+      console.log(error);
+      
+    }
+  },
+  fetchMoneyIn: async () => {
+    
+    try {
+      const res = await axiosInstance.get('/transaction/recvd-transactions')
+      let bal=0;
+      res?.data?.forEach(trans => {
+        bal += trans.amount
+        
+      })
+      
+      set({ moneyIn: bal })
     } catch (error) {
       console.log(error);
       

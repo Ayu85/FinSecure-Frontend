@@ -21,9 +21,10 @@ import useAccount from '@/store/useAccount'
 import BankTransferModal from '../Modals/BankTransferModal'
 import TransactionModal from '../Modals/TransactionsModal'
 import MoneyOutModal from '../Modals/MoneyOutModal'
+import MoneyInModal from '../Modals/MoneyInModal'
 
 const HomeDashboard = () => {
-  const { fetchAccounts, totalBalance, moneyIn, moneyOut,fetchMoneyOut } = useAccount()
+  const { fetchAccounts, totalBalance, moneyIn, moneyOut,fetchMoneyOut,fetchMoneyIn } = useAccount()
   const [currentCard, setCurrentCard] = useState(-1)
   const [showBankTranserModal, setShowBankTranserModal] = useState(false)
   const [showTransactionsModal, setShowTrans] = useState(false)
@@ -34,6 +35,7 @@ const HomeDashboard = () => {
   useEffect(() => {
     fetchAccounts() 
     fetchMoneyOut()
+    fetchMoneyIn()
   }, [])
 
   useEffect(() => {
@@ -107,6 +109,12 @@ const HomeDashboard = () => {
                   isOpen={showSentMoneyModal}
                   onClose={setShowSentMoneyModal}
                 />
+                
+                <MoneyInModal
+                  isOpen={showRecvMoneyModal}
+                  onClose={setShowRecvMoneyModal}
+                />
+                
                 <EllipsisVertical
                   onClick={e => {
                     e.stopPropagation()
