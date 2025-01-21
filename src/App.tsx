@@ -14,7 +14,7 @@ const App = () => {
   useEffect(() => {
     checkAuth()
   }, [])
-  console.log(isCheckingAuth);
+  // console.log(isCheckingAuth);
   
   return (
     <ThemeProvider defaultTheme='dark' storageKey='vite-ui-theme'>

@@ -20,16 +20,20 @@ import {
 import useAccount from '@/store/useAccount'
 import BankTransferModal from '../Modals/BankTransferModal'
 import TransactionModal from '../Modals/TransactionsModal'
+import MoneyOutModal from '../Modals/MoneyOutModal'
 
 const HomeDashboard = () => {
-  const { fetchAccounts, totalBalance, moneyIn, moneyOut } = useAccount()
+  const { fetchAccounts, totalBalance, moneyIn, moneyOut,fetchMoneyOut } = useAccount()
   const [currentCard, setCurrentCard] = useState(-1)
   const [showBankTranserModal, setShowBankTranserModal] = useState(false)
   const [showTransactionsModal, setShowTrans] = useState(false)
+  const [showSentMoneyModal, setShowSentMoneyModal] = useState(false)
+  const [showRecvMoneyModal, setShowRecvMoneyModal] = useState(false)
   const popoverRef = useRef(null)
 
   useEffect(() => {
-    fetchAccounts()
+    fetchAccounts() 
+    fetchMoneyOut()
   }, [])
 
   useEffect(() => {
@@ -70,9 +74,9 @@ const HomeDashboard = () => {
   return (
     <div className='dark:bg-zinc-900 p-4 w-full space-y-4'>
       <div className='poppins-regular space-y-3  pb-4 '>
-        <h1 className='border-b border-b-zinc-800'>Balances</h1>
+        <h1 className='border-b dark:border-b-zinc-800'>Balances</h1>
         <div className='grid md:grid-cols-3 grid-cols-1 gap-28'>
-          {headerItems.map((item, index) => {
+          {headerItems?.map((item, index) => {
             return (
               <div
                 key={index}
@@ -89,13 +93,19 @@ const HomeDashboard = () => {
                 onMouseLeave={e => {
                   e.currentTarget.style.backgroundPosition = '0% 0%'
                 }}
-                onClick={() =>
+                onClick={() => {
                   index === 0 && setShowTrans(!showTransactionsModal)
-                }
+                  index === 1 && setShowRecvMoneyModal(!showRecvMoneyModal)
+                  index === 2 && setShowSentMoneyModal(!showSentMoneyModal)
+                }}
               >
                 <TransactionModal
                   isOpen={showTransactionsModal}
                   onClose={setShowTrans}
+                />
+                <MoneyOutModal
+                  isOpen={showSentMoneyModal}
+                  onClose={setShowSentMoneyModal}
                 />
                 <EllipsisVertical
                   onClick={e => {
@@ -122,11 +132,11 @@ const HomeDashboard = () => {
                     </div>
                   )}
                 </div>
-                <h1 className='border w-8 rounded-full aspect-square p-1 flex justify-center items-center border-zinc-300'>
+                <h1 className='border text-white w-8 rounded-full aspect-square p-1 flex justify-center items-center border-zinc-300'>
                   {item.icon}
                 </h1>
-                <h1>{item.name}</h1>
-                <h1 className='flex items-center '>
+                <h1 className='text-white'>{item.name}</h1>
+                <h1 className='flex items-center text-white'>
                   {' '}
                   <IndianRupee size={15} />
                   {index == 0 && totalBalance}
@@ -139,7 +149,7 @@ const HomeDashboard = () => {
         </div>
       </div>
       <div className='poppins-regular space-y-3  pb-4 '>
-        <h1 className='border-b border-b-zinc-800'>Money transfer</h1>
+        <h1 className='border-b dark:border-b-zinc-800'>Money transfer</h1>
         <div className='grid md:grid-cols-6 grid-cols-1 gap-28'>
           <BankTransferModal
             onClose={setShowBankTranserModal}
@@ -147,23 +157,23 @@ const HomeDashboard = () => {
           />
           <div
             onClick={() => setShowBankTranserModal(true)}
-            className='border cursor-pointer gap-3 border-teal-900 rounded-md hover:bg-gradient-to-br hover:from-teal-700 transition-all duration-200 text-sm w-44 flex flex-col justify-center items-center py-3'
+            className='border cursor-pointer gap-3 dark:border-teal-900 rounded-md hover:bg-gradient-to-br hover:bg-teal-50 dark:hover:from-teal-700 dark:hover:to-teal-200 transition-all duration-200 text-sm w-44 flex flex-col justify-center items-center py-3'
           >
-            <span className='p-2 bg-teal-600 rounded-full'>
+            <span className='p-2 bg-teal-600 rounded-full text-white'>
               <Landmark size={18} />
             </span>
             <h1>To Bank A/c</h1>
           </div>
           <div className='grid md:grid-cols-3 grid-cols-1 gap-28 '>
-            <div className='border cursor-pointer gap-3 border-teal-900 rounded-md text-sm w-44 flex flex-col justify-center items-center py-3'>
-              <span className='p-2 bg-teal-600 rounded-full'>
+            <div className='border cursor-pointer gap-3 dark:border-teal-900 rounded-md hover:bg-gradient-to-br hover:bg-teal-50 dark:hover:from-teal-700 dark:hover:to-teal-200 transition-all duration-200 text-sm w-44 flex flex-col justify-center items-center py-3'>
+              <span className='p-2 bg-teal-600 rounded-full text-white'>
                 <Wallet size={18} />
               </span>
               <h1>To Wallet</h1>
             </div>
           </div>
-          <div className='border cursor-pointer gap-3 border-teal-900 rounded-md text-sm w-44 flex flex-col justify-center items-center py-3'>
-            <span className='p-2 bg-teal-600 rounded-full'>
+          <div className='border cursor-pointer gap-3 dark:border-teal-900 rounded-md hover:bg-gradient-to-br hover:bg-teal-50 dark:hover:from-teal-700 dark:hover:to-teal-200 transition-all duration-200 text-sm w-44 flex flex-col justify-center items-center py-3'>
+            <span className='p-2 bg-teal-600 rounded-full text-white'>
               <SwitchCamera size={18} />
             </span>
             <h1>Self Transfer</h1>
@@ -171,30 +181,30 @@ const HomeDashboard = () => {
         </div>
       </div>
       <div className='poppins-regular space-y-3  pb-4 '>
-        <h1 className='border-b border-b-zinc-800'>Loans</h1>
+        <h1 className='border-b dark:border-b-zinc-800 '>Loans</h1>
         <div className='grid md:grid-cols-6 grid-cols-1 gap-28'>
-          <div className='border cursor-pointer gap-3 border-teal-900 rounded-md text-sm w-44 flex flex-col justify-center items-center py-3'>
-            <span className='p-2 bg-teal-600 rounded-full'>
+          <div className='border cursor-pointer gap-3 dark:border-teal-900 rounded-md text-sm w-44 flex flex-col justify-center items-center py-3'>
+            <span className='p-2 bg-teal-600 rounded-full text-white'>
               <Nfc size={18} />
             </span>
             <h1>EMI Repayment</h1>
           </div>
           <div className='grid md:grid-cols-3 grid-cols-1 gap-28 '>
-            <div className='border cursor-pointer gap-3 border-teal-900 rounded-md text-sm w-44 flex flex-col justify-center items-center py-3'>
-              <span className='p-2 bg-teal-600 rounded-full'>
+            <div className='border cursor-pointer gap-3 dark:border-teal-900 rounded-md text-sm w-44 flex flex-col justify-center items-center py-3'>
+              <span className='p-2 bg-teal-600 rounded-full text-white'>
                 <FileUser size={18} />
               </span>
-              <h1 className='text-zinc-300'>Apply for loan</h1>
+              <h1 className='dark:text-zinc-300'>Apply for loan</h1>
             </div>
           </div>
-          <div className='border cursor-pointer gap-3 border-teal-900 rounded-md text-sm w-44 flex flex-col justify-center items-center py-3'>
-            <span className='p-2 bg-teal-600 rounded-full'>
+          <div className='border cursor-pointer gap-3 dark:border-teal-900 rounded-md text-sm w-44 flex flex-col justify-center items-center py-3'>
+            <span className='p-2 bg-teal-600 rounded-full text-white'>
               <AppWindowMac size={18} />
             </span>
             <h1>Active loans</h1>
           </div>
-          <div className='border cursor-pointer gap-3 border-teal-900 rounded-md text-sm w-44 flex flex-col justify-center items-center py-3'>
-            <span className='p-2 bg-teal-600 rounded-full'>
+          <div className='border cursor-pointer gap-3 dark:border-teal-900 rounded-md text-sm w-44 flex flex-col justify-center items-center py-3'>
+            <span className='p-2 bg-teal-600 text-white rounded-full'>
               <History size={18} />
             </span>
             <h1>Repayment history</h1>

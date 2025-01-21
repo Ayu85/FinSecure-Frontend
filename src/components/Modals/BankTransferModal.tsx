@@ -23,11 +23,34 @@ import { useToast } from '@/hooks/use-toast'
 const BankTransferModal = ({ show, onClose }) => {
   const [accountNumber, setAccountNumber] = useState('')
   const [ifscCode, setIfscCode] = useState('')
-  const [recipientName, setRecipientName] = useState('')
+  const [recipientName, setRecipientName] = useState(null)
   const [selectedAccount, setSelectedAccount] = useState('')
   const [amount, setAmount] = useState(0)
   const { userAccounts } = useAccount()
   const { toast } = useToast()
+  const verifyAccount = async () => {
+    try {
+      const res = await axiosInstance.post('/account/get-owner', {
+        accountNo: accountNumber,
+        ifsc: ifscCode
+      })
+      console.log(res)
+      setRecipientName(res.data.ownerName.owner.fullName)
+      toast({
+        title: res.data.message,
+        variant: 'success'
+      })
+    } catch (error) {
+      console.log(error)
+      setRecipientName(null)
+
+      toast({
+        title: error.response.data.message || 'Account verification failed',
+        variant: 'destructive'
+      })
+    }
+  }
+  // console.log('ownername', recipientName)
 
   const handleSend = async e => {
     // e.prevenDefault()
@@ -91,18 +114,27 @@ const BankTransferModal = ({ show, onClose }) => {
           />
 
           {/* IFSC Code Input */}
-          <Input
-            value={ifscCode}
-            onChange={e => setIfscCode(e.target.value)}
-            placeholder='Enter IFSC Code'
-            className='w-full'
-          />
+          <div className='relative'>
+            <Input
+              value={ifscCode}
+              onChange={e => setIfscCode(e.target.value)}
+              placeholder='Enter IFSC Code'
+              className='w-full'
+            />
+
+            <button
+              onClick={verifyAccount}
+              className='text-sm absolute right-0 top-1 cursor-pointer hover:text-green-400  px-3 float- py-1 rounded-md'
+            >
+              Verify
+            </button>
+          </div>
 
           {/* Recipient Name Input */}
           <Input
             value={recipientName}
-            onChange={e => setRecipientName(e.target.value)}
-            placeholder='Enter Recipient Name'
+            // onChange={e => setRecipientName(e.target.value)}
+            placeholder='Recipient Name'
             className='w-full'
           />
           {/* Amount Input */}
@@ -113,9 +145,12 @@ const BankTransferModal = ({ show, onClose }) => {
             placeholder='Enter amount'
             className='w-full'
           />
-
           <div className='flex flex-col gap-2 pt-4'>
-            <Button onClick={handleSend} className='w-full'>
+            <Button
+              disabled={recipientName === null ? true : false}
+              onClick={handleSend}
+              className='w-full disabled:cursor-not-allowed'
+            >
               Send
             </Button>
             <DialogClose asChild>
