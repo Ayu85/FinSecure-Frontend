@@ -22,18 +22,29 @@ import BankTransferModal from '../Modals/BankTransferModal'
 import TransactionModal from '../Modals/TransactionsModal'
 import MoneyOutModal from '../Modals/MoneyOutModal'
 import MoneyInModal from '../Modals/MoneyInModal'
+import WalletTransferModal from '../Modals/WalletTransferModal'
+import SelfTransferModal from '../Modals/SelfTransferModal'
 
 const HomeDashboard = () => {
-  const { fetchAccounts, totalBalance, moneyIn, moneyOut,fetchMoneyOut,fetchMoneyIn } = useAccount()
+  const {
+    fetchAccounts,
+    totalBalance,
+    moneyIn,
+    moneyOut,
+    fetchMoneyOut,
+    fetchMoneyIn
+  } = useAccount()
   const [currentCard, setCurrentCard] = useState(-1)
   const [showBankTranserModal, setShowBankTranserModal] = useState(false)
+  const [showWalletTranserModal, setShowWalletTranserModal] = useState(false)
+  const [showSelfTranserModal, setShowSelfTranserModal] = useState(false)
   const [showTransactionsModal, setShowTrans] = useState(false)
   const [showSentMoneyModal, setShowSentMoneyModal] = useState(false)
   const [showRecvMoneyModal, setShowRecvMoneyModal] = useState(false)
   const popoverRef = useRef(null)
 
   useEffect(() => {
-    fetchAccounts() 
+    fetchAccounts()
     fetchMoneyOut()
     fetchMoneyIn()
   }, [])
@@ -109,12 +120,12 @@ const HomeDashboard = () => {
                   isOpen={showSentMoneyModal}
                   onClose={setShowSentMoneyModal}
                 />
-                
+
                 <MoneyInModal
                   isOpen={showRecvMoneyModal}
                   onClose={setShowRecvMoneyModal}
                 />
-                
+
                 <EllipsisVertical
                   onClick={e => {
                     e.stopPropagation()
@@ -163,9 +174,14 @@ const HomeDashboard = () => {
             onClose={setShowBankTranserModal}
             show={showBankTranserModal}
           />
+          <WalletTransferModal
+            onClose={setShowWalletTranserModal}
+            show={showWalletTranserModal}
+          />
+
           <div
             onClick={() => setShowBankTranserModal(true)}
-            className='border cursor-pointer gap-3 dark:border-teal-900 rounded-md hover:bg-gradient-to-br hover:bg-teal-50 dark:hover:from-teal-700 dark:hover:to-teal-200 transition-all duration-200 text-sm w-44 flex flex-col justify-center items-center py-3'
+            className='border cursor-pointer gap-3 dark:border-teal-900 rounded-md hover:bg-gradient-to-br  hover:bg-teal-50 dark:hover:bg-teal-600  transition-all duration-200 text-sm w-44 flex flex-col justify-center items-center py-3'
           >
             <span className='p-2 bg-teal-600 rounded-full text-white'>
               <Landmark size={18} />
@@ -173,14 +189,20 @@ const HomeDashboard = () => {
             <h1>To Bank A/c</h1>
           </div>
           <div className='grid md:grid-cols-3 grid-cols-1 gap-28 '>
-            <div className='border cursor-pointer gap-3 dark:border-teal-900 rounded-md hover:bg-gradient-to-br hover:bg-teal-50 dark:hover:from-teal-700 dark:hover:to-teal-200 transition-all duration-200 text-sm w-44 flex flex-col justify-center items-center py-3'>
+            <div
+              onClick={() => setShowWalletTranserModal(true)}
+              className='border cursor-pointer gap-3 dark:border-teal-900 rounded-md hover:bg-gradient-to-br  hover:bg-teal-50 dark:hover:bg-teal-600  transition-all duration-200 text-sm w-44 flex flex-col justify-center items-center py-3'
+            >
               <span className='p-2 bg-teal-600 rounded-full text-white'>
                 <Wallet size={18} />
               </span>
               <h1>To Wallet</h1>
             </div>
           </div>
-          <div className='border cursor-pointer gap-3 dark:border-teal-900 rounded-md hover:bg-gradient-to-br hover:bg-teal-50 dark:hover:from-teal-700 dark:hover:to-teal-200 transition-all duration-200 text-sm w-44 flex flex-col justify-center items-center py-3'>
+          <div
+            onClick={() => setShowSelfTranserModal(true)}
+            className='border cursor-pointer gap-3 dark:border-teal-900 rounded-md hover:bg-gradient-to-br  hover:bg-teal-50 dark:hover:bg-teal-600  transition-all duration-200 text-sm w-44 flex flex-col justify-center items-center py-3'
+          >
             <span className='p-2 bg-teal-600 rounded-full text-white'>
               <SwitchCamera size={18} />
             </span>
@@ -191,27 +213,27 @@ const HomeDashboard = () => {
       <div className='poppins-regular space-y-3  pb-4 '>
         <h1 className='border-b dark:border-b-zinc-800 '>Loans</h1>
         <div className='grid md:grid-cols-6 grid-cols-1 gap-28'>
-          <div className='border cursor-pointer gap-3 dark:border-teal-900 rounded-md text-sm w-44 flex flex-col justify-center items-center py-3'>
+          <div className='border cursor-pointer gap-3 dark:border-teal-900 rounded-md hover:bg-gradient-to-br  hover:bg-teal-50 dark:hover:bg-teal-600  transition-all duration-200 text-sm w-44 flex flex-col justify-center items-center py-3'>
             <span className='p-2 bg-teal-600 rounded-full text-white'>
               <Nfc size={18} />
             </span>
             <h1>EMI Repayment</h1>
           </div>
           <div className='grid md:grid-cols-3 grid-cols-1 gap-28 '>
-            <div className='border cursor-pointer gap-3 dark:border-teal-900 rounded-md text-sm w-44 flex flex-col justify-center items-center py-3'>
+            <div className='border cursor-pointer gap-3 dark:border-teal-900 rounded-md hover:bg-gradient-to-br  hover:bg-teal-50 dark:hover:bg-teal-600  transition-all duration-200 text-sm w-44 flex flex-col justify-center items-center py-3'>
               <span className='p-2 bg-teal-600 rounded-full text-white'>
                 <FileUser size={18} />
               </span>
               <h1 className='dark:text-zinc-300'>Apply for loan</h1>
             </div>
           </div>
-          <div className='border cursor-pointer gap-3 dark:border-teal-900 rounded-md text-sm w-44 flex flex-col justify-center items-center py-3'>
+          <div className='border cursor-pointer gap-3 dark:border-teal-900 rounded-md hover:bg-gradient-to-br  hover:bg-teal-50 dark:hover:bg-teal-600  transition-all duration-200 text-sm w-44 flex flex-col justify-center items-center py-3'>
             <span className='p-2 bg-teal-600 rounded-full text-white'>
               <AppWindowMac size={18} />
             </span>
             <h1>Active loans</h1>
           </div>
-          <div className='border cursor-pointer gap-3 dark:border-teal-900 rounded-md text-sm w-44 flex flex-col justify-center items-center py-3'>
+          <div className='border cursor-pointer gap-3 dark:border-teal-900 rounded-md hover:bg-gradient-to-br  hover:bg-teal-50 dark:hover:bg-teal-600  transition-all duration-200 text-sm w-44 flex flex-col justify-center items-center py-3'>
             <span className='p-2 bg-teal-600 text-white rounded-full'>
               <History size={18} />
             </span>
@@ -219,6 +241,10 @@ const HomeDashboard = () => {
           </div>
         </div>
       </div>
+      <SelfTransferModal
+        onClose={setShowSelfTranserModal}
+        show={showSelfTranserModal}
+      />
     </div>
   )
 }
