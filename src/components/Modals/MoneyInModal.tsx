@@ -33,7 +33,7 @@ const MoneyInModal = ({ isOpen, onClose }) => {
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className='max-w-4xl'>
         <DialogHeader>
-          <DialogTitle>Transaction History</DialogTitle>
+          <DialogTitle>Money In</DialogTitle>
         </DialogHeader>
         <ScrollArea className='h-[500px] w-full rounded-md border'>
           <Table>

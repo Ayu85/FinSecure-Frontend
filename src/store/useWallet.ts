@@ -10,7 +10,7 @@ const useWallet = create<wallet>(set => ({
   async fetchWallets () {
     try {
       const wallets = await axiosInstance.get('/wallet/fetch-wallets')
-      console.log(wallets)
+      console.log("wallets", wallets)
       set({userWallets:wallets?.data})
     } catch (error) {
       console.log(error)

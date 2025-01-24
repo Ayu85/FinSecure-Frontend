@@ -1,12 +1,14 @@
 import useWallet from '@/store/useWallet'
-import { EllipsisVertical, IndianRupee, Wallet } from 'lucide-react'
+import { EllipsisVertical, IndianRupee, Plus, Wallet } from 'lucide-react'
 import React, { useEffect, useRef, useState } from 'react'
+import CreateWalletModal from '../Modals/CreateWalletModal'
+import WalletQuickLinks from '../QuickLinks/WalletQuickLinks'
 
 const WalletDashboard = () => {
   const { userWallets, fetchWallets } = useWallet()
   const [currentCard, setCurrentCard] = useState(-1)
   const popoverRef = useRef(null)
-
+  const [showCreateWallet, setShowCreateWallet] = useState(false)
   useEffect(() => {
     fetchWallets()
   }, [])
@@ -27,63 +29,84 @@ const WalletDashboard = () => {
       <div className='poppins-regular space-y-3 border-b pb-4'>
         <h1 className='border-b border-b-zinc-800'>Wallets</h1>
         <div className='grid md:grid-cols-3 grid-cols-1 gap-28'>
-          {userWallets?.map((item, index) => {
-            return (
-              <div
-                key={index}
-                className='group from-teal-500 to-teal-800
+          {userWallets.length == 0 ? (
+            <span className='space-y-2'>
+              <h1 className='poppins-light-italic w-screen text-sm'>
+                No wallets crated, please create a wallet to ease your spendings{' '}
+              </h1>
+              <button
+                onClick={() => setShowCreateWallet(!showCreateWallet)}
+                className='bg-teal-500 text-[14px] flex items-center gap- px-2 py-1 rounded-md'
+              >
+                Create <Plus size={14} />
+              </button>
+            </span>
+          ) : (
+            userWallets?.map((item, index) => {
+              return (
+                <div
+                  key={index}
+                  className='group from-teal-500 to-teal-800
                   p-2 py-8 text-white pl-4 border border-teal-700 rounded-lg flex relative flex-col
                    cursor-pointer gap-2 transition-all duration-700 ease-in-out bg-gradient-to-br hover:bg-[length:400%_400%] bg-[length:100%_100%] animate-gradient'
-                style={{
-                  backgroundImage: `linear-gradient(135deg, ${item.bg} 0%, ${item.gradientTo} 50%, ${item.bg} 100%)`,
-                  backgroundSize: '200% 200%',
-                  backgroundPosition: '0% 0%',
-                  transition: 'all 0.5s ease-in-out'
-                }}
-                onMouseEnter={e => {
-                  e.currentTarget.style.backgroundPosition = '100% 100%'
-                }}
-                onMouseLeave={e => {
-                  e.currentTarget.style.backgroundPosition = '0% 0%'
-                }}
-              >
-                <EllipsisVertical
-                  onClick={e => {
-                    e.stopPropagation()
-                    setCurrentCard(currentCard === index ? -1 : index)
+                  style={{
+                    backgroundImage: `linear-gradient(135deg, ${item.bg} 0%, ${item.gradientTo} 50%, ${item.bg} 100%)`,
+                    backgroundSize: '200% 200%',
+                    backgroundPosition: '0% 0%',
+                    transition: 'all 0.5s ease-in-out'
                   }}
-                  className='absolute right-1 cursor-pointer top-3 size-5'
-                />
-                <Wallet className='absolute -bottom-2 opacity-20 right-2 size-44'/>
-                <div
-                  ref={popoverRef}
-                  className={`absolute right-1 transition-all scale-0 ${
-                    currentCard === index && 'scale-100'
-                  } top-9 text-xs bg-white text-zinc-400 rounded-md p-2 space-y-1`}
+                  onMouseEnter={e => {
+                    e.currentTarget.style.backgroundPosition = '100% 100%'
+                  }}
+                  onMouseLeave={e => {
+                    e.currentTarget.style.backgroundPosition = '0% 0%'
+                  }}
                 >
-                  {currentCard === index && (
-                    <div>
-                      <h1 className='hover:text-zinc-800 transition-all'>
-                        Show detailed data
-                      </h1>
-                      <h1 className='hover:text-zinc-800 transition-all'>
-                        Refresh
-                      </h1>
-                    </div>
-                  )}
+                  <EllipsisVertical
+                    onClick={e => {
+                      e.stopPropagation()
+                      setCurrentCard(currentCard === index ? -1 : index)
+                    }}
+                    className='absolute right-1 cursor-pointer top-3 size-5'
+                  />
+                  <Wallet className='absolute -bottom-2 opacity-20 right-2 size-44' />
+                  <div
+                    ref={popoverRef}
+                    className={`absolute right-1 transition-all scale-0 ${
+                      currentCard === index && 'scale-100'
+                    } top-9 text-xs bg-white text-zinc-400 rounded-md p-2 space-y-1`}
+                  >
+                    {currentCard === index && (
+                      <div>
+                        <h1 className='hover:text-zinc-800 transition-all'>
+                          Show detailed data
+                        </h1>
+                        <h1 className='hover:text-zinc-800 transition-all'>
+                          Refresh
+                        </h1>
+                      </div>
+                    )}
+                  </div>
+                  <h1 className='border w-8 rounded-full aspect-square p-1 flex justify-center items-center border-zinc-300'>
+                    {item?.walletId}
+                  </h1>
+                  <h1>{item?.walletName}</h1>
+                  <h1 className='flex items-center'>
+                    <IndianRupee size={15} /> {item?.balance}
+                  </h1>
                 </div>
-                <h1 className='border w-8 rounded-full aspect-square p-1 flex justify-center items-center border-zinc-300'>
-                  {item?.walletId}
-                </h1>
-                <h1>{item?.walletName}</h1>
-                <h1 className='flex items-center'>
-                  <IndianRupee size={15} /> {item?.balance}
-                </h1>
-              </div>
-            )
-          })}
+              )
+            })
+          )}
         </div>
       </div>
+      <div className='py-3'>
+        <WalletQuickLinks/>
+      </div>
+      <CreateWalletModal
+        onClose={setShowCreateWallet}
+        show={showCreateWallet}
+      />
     </div>
   )
 }
